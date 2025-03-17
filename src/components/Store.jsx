@@ -50,19 +50,7 @@ function Tags({ text, setFilterTags }) {
   return (
     <div className="flex select-none items-center gap-1 rounded-full bg-accent px-3 py-1 font-mono text-xs font-black text-black">
       <span>{textToDisplay}</span>
-      {/* Uncomment if you want to add a close button for removing the tag
-      <Icon
-        path={mdiWindowClose}
-        size={0.6}
-        className="cursor-pointer transition-all hover:scale-150"
-        onClick={() => {
-          setFilterTags((prev) => {
-            const newFilters = [...prev];
-            newFilters.splice(newFilters.indexOf(text), 1);
-            return newFilters;
-          });
-        }}
-      /> */}
+     
     </div>
   );
 }
@@ -83,7 +71,6 @@ function ColorCheckBox({ color }) {
         },
       }}
     >
-      {/* Use full width on mobile and quarter width on sm+ screens */}
       <Checkbox
         className="flex w-full sm:w-1/4 flex-col items-center justify-center gap-2"
         value={color}
@@ -288,7 +275,6 @@ export default function Store({ searchText, showFav }) {
   }
 
   return (
-    // Use flex-col on mobile and row on medium+ screens
     <section className="flex flex-col md:flex-row overflow-hidden">
       <Aside
         colors={colors}

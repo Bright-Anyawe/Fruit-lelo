@@ -5,6 +5,7 @@ import {
   mdiHeart,
   mdiCart,
   mdiHeartOutline,
+  mdiMenu, // Added menu icon for mobile
 } from "@mdi/js";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router";
@@ -18,35 +19,49 @@ export default function Header({ setSearchText, showFav, setShowFav }) {
   const navigate = useNavigate();
   const { favs } = useContext(FavContext);
   const { cart } = useContext(CartContext);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <header className="flex justify-between px-10 py-6">
-      <div className="flex select-none items-center gap-6">
-        <Link
-          to={"/"}
-          className="cursor-pointer text-3xl font-bold text-accent transition-all hover:drop-shadow-[0_0_10px]"
-        >
-          Fruits Lelo.
-        </Link>
-        <nav className="flex gap-3">
+    <header className="flex flex-col md:flex-row justify-between px-6 md:px-10 py-4 md:py-6">
+      <div className="flex justify-between items-center mb-4 md:mb-0">
+        <div className="flex select-none items-center gap-4 md:gap-6">
           <Link
-            className="cursor-pointer border-b-2 border-bg px-1 transition-all hover:border-b-2 hover:border-accent hover:drop-shadow-[0_0_20px_#AE9B84]"
             to={"/"}
+            className="cursor-pointer text-2xl md:text-3xl font-bold text-accent transition-all hover:drop-shadow-[0_0_10px]"
           >
-            Home
+            Fruits Lelo.
           </Link>
-          <Link
-            className="cursor-pointer border-b-2 border-bg px-1 transition-all hover:border-b-2 hover:border-accent hover:drop-shadow-[0_0_20px_#AE9B84]"
-            to={"/store"}
+          <nav
+            className={`md:flex gap-3 absolute md:static top-full left-0 w-full bg-secondary md:bg-transparent p-4 md:p-0 transition-all duration-300 ${
+              isMobileMenuOpen ? "translate-y-0" : "-translate-y-full md:translate-y-0"
+            }`}
           >
-            Store
-          </Link>
-        </nav>
+            <Link
+              className="cursor-pointer border-b-2 border-bg px-1 transition-all hover:border-b-2 hover:border-accent hover:drop-shadow-[0_0_20px_#AE9B84] block md:inline-block"
+              to={"/"}
+            >
+              Home
+            </Link>
+            <Link
+              className="cursor-pointer border-b-2 border-bg px-1 transition-all hover:border-b-2 hover:border-accent hover:drop-shadow-[0_0_20px_#AE9B84] block md:inline-block"
+              to={"/store"}
+            >
+              Store
+            </Link>
+          </nav>
+        </div>
+        <button className="md:hidden" onClick={toggleMobileMenu}>
+          <Icon path={mdiMenu} size={1} color="#ae9b84" />
+        </button>
       </div>
-      <div className="flex items-center gap-11">
+      <div className="flex items-center gap-4 md:gap-11">
         <form
           action=""
-          className="flex select-none items-center rounded-3xl bg-secondary p-3"
+          className="flex select-none items-center rounded-3xl bg-secondary p-2 md:p-3 w-full md:w-auto"
           onClick={() => {
             searchRef.current.focus();
           }}
@@ -54,7 +69,7 @@ export default function Header({ setSearchText, showFav, setShowFav }) {
           <Icon path={mdiMagnify} size={1} color="#ae9b84" />
           <input
             type="text"
-            className="border-none bg-secondary px-3 caret-accent outline-none placeholder:text-white"
+            className="border-none bg-secondary px-2 md:px-3 caret-accent outline-none placeholder:text-white w-full"
             ref={searchRef}
             placeholder="Search"
             onChange={(e) => {
@@ -77,7 +92,7 @@ export default function Header({ setSearchText, showFav, setShowFav }) {
             }}
           />
         </form>
-        <div className="flex gap-7">
+        <div className="flex gap-4 md:gap-7">
           <ConfigProvider
             theme={{
               token: {

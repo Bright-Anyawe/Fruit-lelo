@@ -21,34 +21,37 @@ import { Link } from "react-router-dom";
 import { Flipped, Flipper, spring } from "react-flip-toolkit";
 
 function Tags({ text, setFilterTags }) {
-  if (text == "") return null;
+  if (text === "") return null;
   let textToDisplay = '"' + text + '"';
-  if (text == "C" || text == "A" || text == "K" || text == "E" || text == "B6")
+  if (["C", "A", "K", "E", "B6"].includes(text))
     textToDisplay = "Vitamin " + text;
   else if (
-    text == "Rose" ||
-    text == "Citrus" ||
-    text == "Nightshade" ||
-    text == "Gourd" ||
-    text == "Palm" ||
-    text == "Cashew" ||
-    text == "Berry" ||
-    text == "Laurel" ||
-    text == "Other" ||
-    text == "Purple" ||
-    text == "Green" ||
-    text == "Brown" ||
-    text == "Red" ||
-    text == "Orange" ||
-    text == "Yellow" ||
-    text == "Blue" ||
-    text == "Black"
+    [
+      "Rose",
+      "Citrus",
+      "Nightshade",
+      "Gourd",
+      "Palm",
+      "Cashew",
+      "Berry",
+      "Laurel",
+      "Other",
+      "Purple",
+      "Green",
+      "Brown",
+      "Red",
+      "Orange",
+      "Yellow",
+      "Blue",
+      "Black",
+    ].includes(text)
   )
     textToDisplay = text;
   return (
     <div className="flex select-none items-center gap-1 rounded-full bg-accent px-3 py-1 font-mono text-xs font-black text-black">
-      <span className="">{textToDisplay}</span>
-      {/* <Icon
+      <span>{textToDisplay}</span>
+      {/* Uncomment if you want to add a close button for removing the tag
+      <Icon
         path={mdiWindowClose}
         size={0.6}
         className="cursor-pointer transition-all hover:scale-150"
@@ -76,12 +79,13 @@ function ColorCheckBox({ color }) {
           colorBorder: color,
           borderRadiusSM: 50,
           controlInteractiveSize: 25,
-          colorWhite: color == "Yellow" || color == "Orange" ? "#000" : "#fff",
+          colorWhite: color === "Yellow" || color === "Orange" ? "#000" : "#fff",
         },
       }}
     >
+      {/* Use full width on mobile and quarter width on sm+ screens */}
       <Checkbox
-        className="flex w-1/4 flex-col items-center justify-center gap-2"
+        className="flex w-full sm:w-1/4 flex-col items-center justify-center gap-2"
         value={color}
       >
         {color}
@@ -90,14 +94,7 @@ function ColorCheckBox({ color }) {
   );
 }
 
-function Aside({
-  colors,
-  setColors,
-  family,
-  setFamily,
-  vitamins,
-  setVitamins,
-}) {
+function Aside({ colors, setColors, family, setFamily, vitamins, setVitamins }) {
   const [isColorOpen, setIsColorOpen] = useState(true);
   const [isFamilyOpen, setIsFamilyOpen] = useState(true);
   const [isVitaminOpen, setIsVitaminOpen] = useState(true);
@@ -106,7 +103,7 @@ function Aside({
     setColors(checkedValues);
   }
   function handleFamilyChange(checkedValues) {
-    if (checkedValues.length == 0) setFamily("");
+    if (checkedValues.length === 0) setFamily("");
     else setFamily(checkedValues[0]);
   }
   function handleVitaminsChange(checkedValues) {
@@ -114,8 +111,9 @@ function Aside({
   }
 
   return (
-    <div className="w-72 shrink-0 select-none p-10">
-      <div className="">
+    // On mobile use full width with smaller padding, fixed width on md+
+    <div className="w-full md:w-72 shrink-0 select-none p-4 sm:p-6 md:p-10">
+      <div>
         <div className="flex items-center justify-between bg-bg">
           <h1 className="text-2xl font-bold">
             Color {colors.length > 0 ? `(${colors.length})` : ""}
@@ -131,10 +129,12 @@ function Aside({
           />
         </div>
         <div
-          className={`m-6 origin-top overflow-hidden transition-all duration-500 ${isColorOpen ? "h-72" : "h-0"}`}
+          className={`m-6 origin-top overflow-hidden transition-all duration-500 ${
+            isColorOpen ? "h-72" : "h-0"
+          }`}
         >
           <Checkbox.Group
-            className="flex gap-5"
+            className="flex flex-wrap gap-5"
             onChange={handleColorChange}
             value={colors}
           >
@@ -144,10 +144,10 @@ function Aside({
           </Checkbox.Group>
         </div>
       </div>
-      <div className="">
+      <div>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">
-            Family {family != "" ? "(1)" : ""}
+            Family {family !== "" ? "(1)" : ""}
           </h1>
           <Icon
             path={isFamilyOpen ? mdiChevronDown : mdiChevronUp}
@@ -175,14 +175,16 @@ function Aside({
             <Checkbox.Group
               options={FAMILYOPTIONS}
               defaultValue={[]}
-              className={`flex origin-top flex-col flex-nowrap gap-5 overflow-hidden transition-all duration-500 ${isFamilyOpen ? "h-[366px]" : "h-0"}`}
+              className={`flex origin-top flex-col flex-nowrap gap-5 overflow-hidden transition-all duration-500 ${
+                isFamilyOpen ? "h-[366px]" : "h-0"
+              }`}
               onChange={handleFamilyChange}
               value={family}
             />
           </ConfigProvider>
         </div>
       </div>
-      <div className="">
+      <div>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">
             Vitamins {vitamins.length > 0 ? `(${vitamins.length})` : ""}
@@ -213,7 +215,9 @@ function Aside({
             <Checkbox.Group
               options={VITAMINSOPTIONS}
               defaultValue={[]}
-              className={`flex origin-top flex-col flex-nowrap gap-5 overflow-hidden transition-all duration-500 ${isVitaminOpen ? "h-48" : "h-0"}`}
+              className={`flex origin-top flex-col flex-nowrap gap-5 overflow-hidden transition-all duration-500 ${
+                isVitaminOpen ? "h-48" : "h-0"
+              }`}
               onChange={handleVitaminsChange}
             />
           </ConfigProvider>
@@ -240,32 +244,30 @@ export default function Store({ searchText, showFav }) {
   useEffect(() => {
     setFilterTags(colors.concat(family).concat(vitamins).concat(searchText));
     let tempArr =
-      searchText.length == 0
+      searchText.length === 0
         ? showFav
           ? getFavFruits()
           : [...FRUITS]
         : (showFav ? getFavFruits() : FRUITS).filter((fruit) =>
-            fruit.name.toLowerCase().includes(searchText.toLowerCase()),
+            fruit.name.toLowerCase().includes(searchText.toLowerCase())
           );
 
     if (colors.length > 0) {
       tempArr = tempArr.filter((fruit) => {
         return (
-          colors.filter((color) => {
-            return fruit.colors.includes(color);
-          }).length == colors.length
+          colors.filter((color) => fruit.colors.includes(color)).length ===
+          colors.length
         );
       });
     }
-    if (family != "") {
-      tempArr = tempArr.filter((fruit) => fruit.family == family);
+    if (family !== "") {
+      tempArr = tempArr.filter((fruit) => fruit.family === family);
     }
     if (vitamins.length > 0) {
       tempArr = tempArr.filter((fruit) => {
         return (
-          vitamins.filter((vitamin) => {
-            return fruit.vitamins.includes(vitamin);
-          }).length == vitamins.length
+          vitamins.filter((vitamin) => fruit.vitamins.includes(vitamin))
+            .length === vitamins.length
         );
       });
     }
@@ -273,8 +275,7 @@ export default function Store({ searchText, showFav }) {
   }, [colors, family, vitamins, searchText, showFav]);
 
   function isInCart(id) {
-    for (let i in cart) if (cart[i].fruitId == id) return true;
-    return false;
+    return cart.some((item) => item.fruitId === id);
   }
 
   function onExit(element, index, removeElement) {
@@ -287,10 +288,9 @@ export default function Store({ searchText, showFav }) {
   }
 
   return (
-    <section className="flex overflow-hidden">
+    // Use flex-col on mobile and row on medium+ screens
+    <section className="flex flex-col md:flex-row overflow-hidden">
       <Aside
-        filterTags={filterTags}
-        setFilterTags={setFilterTags}
         colors={colors}
         setColors={setColors}
         family={family}
@@ -298,7 +298,7 @@ export default function Store({ searchText, showFav }) {
         vitamins={vitamins}
         setVitamins={setVitamins}
       />
-      <div className="flex w-full flex-col items-start gap-5 pr-10 pt-10">
+      <div className="flex w-full flex-col items-start gap-5 p-4 sm:p-6 md:p-10">
         <div className="flex items-center gap-2 text-2xl font-bold">
           <span>Items ({filteredFruits.length})</span>
           {showFav && (
@@ -307,18 +307,15 @@ export default function Store({ searchText, showFav }) {
             </span>
           )}
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           {filterTags.map((item, index) => (
-            <Tags
-              text={item}
-              setFilterTags={setFilterTags}
-              key={item + index}
-            />
+            <Tags text={item} setFilterTags={setFilterTags} key={item + index} />
           ))}
         </div>
         <Flipper
           flipKey={fruitsFlipKey}
-          className="grid w-full grid-cols-3 gap-7"
+          // 1 column on mobile, 2 on small screens, 3 on md+ screens
+          className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7"
         >
           {filteredFruits.map((fruit, index) => {
             return (
@@ -332,13 +329,14 @@ export default function Store({ searchText, showFav }) {
                   <Icon
                     path={favs.includes(fruit.id) ? mdiHeart : mdiHeartOutline}
                     size={1}
-                    className="absolute right-10 top-10 cursor-pointer transition-all duration-500 hover:scale-125 hover:drop-shadow-[0_0_15px_red]"
+                    // Adjust positioning for responsiveness
+                    className="absolute right-4 top-4 sm:right-10 sm:top-10 cursor-pointer transition-all duration-500 hover:scale-125 hover:drop-shadow-[0_0_15px_red]"
                     color={favs.includes(fruit.id) ? "red" : "white"}
                     onClick={() => {
                       setFavs((prev) => {
                         const newArr = [...prev];
                         if (favs.includes(fruit.id)) {
-                          newArr.splice(favs.indexOf(fruit.id), 1);
+                          newArr.splice(newArr.indexOf(fruit.id), 1);
                           return newArr;
                         }
                         newArr.push(fruit.id);
@@ -347,22 +345,21 @@ export default function Store({ searchText, showFav }) {
                       });
                     }}
                   />
-                  <Link
-                    to={`/store/${fruit.slug}`}
-                    className="rounded-2xl"
-                    key={fruit.name + index}
-                  >
-                    <div className="flex items-center justify-center pb-[150px] pt-[180px]">
-                      <div className="size-[100px]">
+                  <Link to={`/store/${fruit.slug}`} className="rounded-2xl">
+                    <div
+                      className="flex items-center justify-center pt-8 pb-8 sm:pt-12 sm:pb-12 md:pt-16 md:pb-16"
+                    >
+                      {/* Responsive image sizing */}
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32">
                         <img
                           src={fruit.src}
                           alt={fruit.name}
-                          className="size-full transition-all duration-500 group-hover:scale-125 group-hover:drop-shadow-[0_0_20px_#AE9B84]"
+                          className="w-full h-full object-contain transition-all duration-500 group-hover:scale-125 group-hover:drop-shadow-[0_0_20px_#AE9B84]"
                         />
                       </div>
                     </div>
                   </Link>
-                  <div className="flex w-full items-center justify-between px-10 pb-10">
+                  <div className="flex w-full items-center justify-between px-4 sm:px-6 md:px-10 pb-4 sm:pb-6 md:pb-10">
                     <div className="flex flex-col justify-between">
                       <h3 className="font-bold">{fruit.name}</h3>
                       <span className="text-gray">{fruit.family} family</span>
@@ -380,14 +377,11 @@ export default function Store({ searchText, showFav }) {
                           const newCart = [...prev];
                           if (!isInCart(fruit.id)) {
                             newCart.push({ fruitId: fruit.id, count: 1 });
-                            localStorage.setItem(
-                              "cart",
-                              JSON.stringify(newCart),
-                            );
+                            localStorage.setItem("cart", JSON.stringify(newCart));
                             return newCart;
                           }
                           for (let i in newCart)
-                            if (newCart[i].fruitId == fruit.id)
+                            if (newCart[i].fruitId === fruit.id)
                               newCart.splice(i, 1);
                           localStorage.setItem("cart", JSON.stringify(newCart));
                           return newCart;
@@ -400,7 +394,6 @@ export default function Store({ searchText, showFav }) {
             );
           })}
         </Flipper>
-        {/* </Flipper> */}
       </div>
     </section>
   );
